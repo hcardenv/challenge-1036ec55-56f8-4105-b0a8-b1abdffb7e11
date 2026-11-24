@@ -10,7 +10,7 @@ import io.cucumber.java.es.Y;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.rest.abilities.CallAnApi;
-import net.thucydides.core.annotations.Managed;
+import net.serenitybdd.annotations.Managed;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package com.banca.seguridad.steps;
 
+import com.banca.seguridad.interactions.ConsultarRecurso;
 import com.banca.seguridad.questions.ValidarAcceso;
 import com.banca.seguridad.tasks.RealizarLogin;
 import com.banca.seguridad.tasks.VerificarVulnerabilidadSQL;
@@ -21,7 +22,7 @@ public class AutenticacionSteps {
 
     @Dado("que el usuario {string} existe en el sistema con rol {string}")
     public void queElUsuarioExisteEnElSistemaConRol(String usuario, String rol) {
-        Actor actor = OnStage.theActorCalled(NameConverter.forClass(usuario));
+        Actor actor = OnStage.theActorCalled(NameConverter.humanize(usuario));
         actor.can(CallAnApi.at("https://api.banca-segura.com"));
     }
 
@@ -52,7 +53,7 @@ public class AutenticacionSteps {
     @Cuando("el usuario intenta acceder al recurso {string} sin autorización")
     public void elUsuarioIntentaAccederAlRecursoSinAutorizacion(String recurso) {
         Actor actor = OnStage.theActorInTheSpotlight();
-        actor.attemptsTo(ValidarAcceso.alRecurso(recurso));
+        actor.attemptsTo(ConsultarRecurso.en(recurso));
     }
 
     @Entonces("el sistema debe retornar código de error {int}")
@@ -81,14 +82,14 @@ public class AutenticacionSteps {
 
     @Dado("que el usuario {string} tiene un token JWT válido")
     public void queElUsuarioTieneUnTokenJWTValido(String usuario) {
-        Actor actor = OnStage.theActorCalled(NameConverter.forClass(usuario));
+        Actor actor = OnStage.theActorCalled(NameConverter.humanize(usuario));
         actor.can(CallAnApi.at("https://api.banca-segura.com"));
     }
 
     @Cuando("el usuario {string} accede a la pantalla de transacciones")
     public void elUsuarioAccedeALaPantallaDeTransacciones(String usuario) {
         Actor actor = OnStage.theActorInTheSpotlight();
-        actor.attemptsTo(ValidarAcceso.aTransacciones());
+        actor.attemptsTo(ConsultarRecurso.transacciones());
     }
 
     @Entonces("el sistema debe permitir el acceso solo si el token tiene el permiso {string}")
@@ -100,7 +101,7 @@ public class AutenticacionSteps {
     @Cuando("se intercepta una solicitud de autenticación con token manipulado")
     public void seInterceptaUnaSolicitudDeAutenticacionConTokenManipulado() {
         Actor actor = OnStage.theActorInTheSpotlight();
-        actor.attemptsTo(ValidarAcceso.conTokenManipulado());
+        actor.attemptsTo(ConsultarRecurso.conTokenManipulado());
     }
 
     @Entonces("el sistema debe rechazar el token manipulado")

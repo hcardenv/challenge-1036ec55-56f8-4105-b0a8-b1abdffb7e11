@@ -12,56 +12,107 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <serenity.version>4.0.48</serenity.version>
-        <selenium.version>4.16.1</selenium.version>
-        <cucumber.version>7.14.0</cucumber.version>
-        <rest-assured.version>5.3.2</rest-assured.version>
-        <junit.version>5.10.0</junit.version>
+
+        <!-- Verifica que esta versión exista en:
+             https://repo.maven.apache.org/maven2/net/serenity-bdd/serenity-core/ -->
+        <serenity.version>4.1.20</serenity.version>
+
+        <!-- Debe coincidir con la versión de cucumber-core que trae Serenity
+             (compruébalo con: mvn dependency:tree -Dincludes=io.cucumber) -->
+        <cucumber.version>7.17.0</cucumber.version>
+
+        <junit.platform.version>1.10.2</junit.platform.version>
+        <junit.version>5.10.2</junit.version>
         <lombok.version>1.18.30</lombok.version>
         <jjwt.version>0.12.3</jjwt.version>
         <commons-crypto.version>1.2.0</commons-crypto.version>
+        <spring-security.version>6.2.1</spring-security.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>net.serenity-bdd</groupId>
-                <artifactId>serenity-bom</artifactId>
-                <version>${serenity.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <!-- Serenity BDD Core -->
+        <!-- Serenity BDD (trae Selenium, Cucumber y Rest Assured compatibles) -->
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-core</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-cucumber</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
         <dependency>
             <groupId>net.serenity-bdd</groupId>
             <artifactId>serenity-rest-assured</artifactId>
+            <version>${serenity.version}</version>
         </dependency>
-
-        <!-- Selenium -->
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-junit5</artifactId>
+            <version>${serenity.version}</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- Cucumber -->
+        <!-- Screenplay (Actor, Task, Question, BrowseTheWeb, CallAnApi) -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-screenplay</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-screenplay-webdriver</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-screenplay-rest</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
+
+        <!-- Anotaciones Gherkin (@Dado, @Cuando, @Entonces, @Y) -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <version>${cucumber.version}</version>
         </dependency>
+
+        <!-- Librerias usadas directamente en el codigo (mismas versiones que trae Serenity) -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+
+        <!-- Spring Security: usado por config/SecurityConfig -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Motor de Cucumber para JUnit Platform -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
@@ -69,19 +120,18 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit 5 -->
+        <!-- JUnit 5 + Suite (necesario para @Suite en RunCucumberTest) -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Rest Assured -->
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>${rest-assured.version}</version>
         </dependency>
 
         <!-- Lombok -->
@@ -128,6 +178,24 @@
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <includes>
+                        <include>**/RunCucumberTest.java</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>
@@ -144,27 +212,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <testFailureIgnore>false</testFailureIgnore>
-                    <includes>
-                        <include>**/RunCucumberTest.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>net.serenity-bdd.maven.plugins</groupId>
-                <artifactId>serenity-maven-plugin</artifactId>
-                <version>${serenity.version}</version>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

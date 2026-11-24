@@ -2,9 +2,7 @@ package com.banca.seguridad.questions;
 
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
-import net.serenitybdd.screenplay.rest.questions.ResponseConsequence;
 import io.restassured.response.Response;
-import org.json.JSONObject;
 import com.banca.seguridad.exceptions.SecurityException;
 import java.util.regex.Pattern;
 import java.util.Arrays;
@@ -28,11 +26,11 @@ public class ValidarVulnerabilidad implements Question<Boolean> {
             Pattern.CASE_INSENSITIVE
         );
         this.patronXSS = Pattern.compile(
-            "(?i)(<script|javascript:|onerror=|onload=|alert\(|document\.cookie)",
+            "(?i)(<script|javascript:|onerror=|onload=|alert\\(|document\\.cookie)",
             Pattern.CASE_INSENSITIVE
         );
         this.patronPathTraversal = Pattern.compile(
-            "(\.\./|\.\.\\/|%2e%2e/|%2e%2e\\|/etc/passwd|/windows/system32)",
+            "(\\.\\./|\\.\\.\\/|%2e%2e/|%2e%2e\\|/etc/passwd|/windows/system32)",
             Pattern.CASE_INSENSITIVE
         );
     }

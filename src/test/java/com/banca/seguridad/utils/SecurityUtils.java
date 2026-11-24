@@ -4,7 +4,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.crypto.cipher.CryptoCipher;
-import org.apache.commons.crypto.utils.EncryptionUtils;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +12,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SecurityUtils {
 
@@ -115,6 +115,30 @@ public class SecurityUtils {
     public static String hashearConSalt(String dato, String salt) {
         // SUPERFICIE DE PRACTICA: Implementar hashing con salt
         throw new UnsupportedOperationException("Metodo por implementar: hashearConSalt");
+    }
+
+    public static String generarRequestId() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static String cifrarContrasena(String contrasena) {
+        // SUPERFICIE DE PRACTICA: Implementar el cifrado/hash de la contrasena (Fase 3)
+        throw new UnsupportedOperationException("Metodo por implementar: cifrarContrasena");
+    }
+
+    public static String cifrarToken(String token) {
+        // SUPERFICIE DE PRACTICA: Implementar el cifrado del token (Fase 3)
+        throw new UnsupportedOperationException("Metodo por implementar: cifrarToken");
+    }
+
+    public static void registrarEventoAutenticacion(String usuario, boolean exitoso, String detalle) {
+        // SUPERFICIE DE PRACTICA: Registrar eventos de autenticacion en auditoria (Fase 3)
+        throw new UnsupportedOperationException("Metodo por implementar: registrarEventoAutenticacion");
+    }
+
+    public static void registrarVulnerabilidad(String tipo, String campo, String payload, String detalles) {
+        // SUPERFICIE DE PRACTICA: Registrar la vulnerabilidad detectada (Fase 2)
+        throw new UnsupportedOperationException("Metodo por implementar: registrarVulnerabilidad");
     }
 
     public static SecretKey getClaveSecreta() {

@@ -6,8 +6,7 @@ import io.restassured.response.Response;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.rest.interactions.Post;
-import net.serenitybdd.screenplay.rest.questions.RestQuestion;
-import org.apache.commons.lang3.StringUtils;
+import net.serenitybdd.screenplay.rest.questions.LastResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static org.hamcrest.CoreMatchers.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class VerificarVulnerabilidadSQL implements Task {
 
@@ -35,7 +34,7 @@ public class VerificarVulnerabilidadSQL implements Task {
 
     private static final Pattern PATRON_SQLPeligROSO = Pattern.compile(
         "(?i)(.*(\\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER|CREATE|TRUNCATE)\\b.*)|"
-        + ".*(\\b(OR|AND)\\b\\s+['\\"][0-9]+['\\"]\\s*=\\s*['\\"][0-9]+['\\"])|"
+        + ".*(\\b(OR|AND)\\b\\s+['\"][0-9]+['\"]\\s*=\\s*['\"][0-9]+['\"])|"
         + ".*(--|\\#|\\/\\*|\\*\\/).*)"
     );
 
@@ -49,8 +48,12 @@ public class VerificarVulnerabilidadSQL implements Task {
         this.esAutomatica = builder.esAutomatica;
     }
 
-    public static Builder enCampo(String campo, String valorInyeccion) {
-        return new Builder().conCampo(campo).conValor(valorInyeccion);
+    public static VerificarVulnerabilidadSQL enCampo(String campo, String valorInyeccion) {
+        return new Builder().conCampo(campo).conValor(valorInyeccion).build();
+    }
+
+    public static VerificarVulnerabilidadSQL enElSistema() {
+        return automatica("/api/v1/consultas/buscar");
     }
 
     public static VerificarVulnerabilidadSQL automatica(String endpoint) {
@@ -78,8 +81,9 @@ public class VerificarVulnerabilidadSQL implements Task {
             }
         }
 
+        final boolean deteccionFinal = vulnerabilidadDetectada;
         actor.should(seeThat("Detección de inyección SQL",
-            actor1 -> vulnerabilidadDetectada,
+            actor1 -> deteccionFinal,
             equalTo(false)
         ));
     }
@@ -126,10 +130,10 @@ public class VerificarVulnerabilidadSQL implements Task {
                 )
         );
 
-        Response respuesta = RestQuestion.as(actor).lastResponse();
+        Response respuesta = LastResponse.received().answeredBy(actor);
         int codigoEstado = respuesta.getStatusCode();
 
-        boolean respuesta Sospechosa = false;
+        boolean respuestaSospechosa = false;
         String mensajeRespuesta = respuesta.getBody().asString();
 
         if (codigoEstado == 200) {

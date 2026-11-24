@@ -8,15 +8,11 @@ import io.restassured.response.Response;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.rest.interactions.Post;
-import net.serenitybdd.screenplay.rest.questions.RestQuestion;
-import net.thucydides.model.util.NameConverter;
+import net.serenitybdd.screenplay.rest.questions.LastResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static net.serenitybdd.screenplay.Tasks.instrumented;
-import static org.hamcrest.CoreMatchers.*;
 
 public class RealizarLogin implements Task {
 
@@ -32,12 +28,12 @@ public class RealizarLogin implements Task {
         this.codigo2FA = builder.codigo2FA;
     }
 
-    public static Builder conCredenciales(String usuario, String contrasena) {
-        return new Builder().conUsuario(usuario).conContrasena(contrasena);
+    public static RealizarLogin conCredenciales(String usuario, String contrasena) {
+        return new Builder().conUsuario(usuario).conContrasena(contrasena).build();
     }
 
     public static RealizarLogin con2FA(String usuario, String codigo2FA) {
-        return new Builder().conUsuario(usuario).conContrasena("temp_password").con2FA(codigo2FA);
+        return new Builder().conUsuario(usuario).conContrasena("temp_password").con2FA(codigo2FA).build();
     }
 
     @Override
@@ -70,7 +66,7 @@ public class RealizarLogin implements Task {
                 )
         );
 
-        Response ultimaRespuesta = RestQuestion.as(actor).lastResponse();
+        Response ultimaRespuesta = LastResponse.received().answeredBy(actor);
 
         if (ultimaRespuesta.getStatusCode() == 200) {
             String tokenJWT = ultimaRespuesta.jsonPath().getString("token");
