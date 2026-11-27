@@ -75,3 +75,23 @@ Cada medida se puede comprobar con los escenarios del feature.
 
 - **Error común:** bloquear caracteres en lugar de usar consultas parametrizadas. Además de ser fácil de evadir, rechaza datos válidos de los clientes.
 - **Prueba de rendimiento:** el escenario de estrés usa 100 ataques a 10 por segundo, muy poco comparado con las 1.500 solicitudes por segundo del sistema. La prueba debería hacerse con una carga parecida a la real para saber si el WAF y los registros afectan el SLA.
+
+---
+
+## Glosario
+
+| Término | Qué significa |
+|---|---|
+| Inyección SQL | Escribir comandos de base de datos en un campo del formulario para sacar o borrar información. |
+| Consulta parametrizada (`PreparedStatement`) | Una forma de hacer consultas que separa el dato del usuario de la orden, para que no se pueda inyectar nada. |
+| Punto de entrada | Cualquier lugar por donde el usuario envía datos al sistema: un formulario, un campo o un parámetro de una API. |
+| Payload | El texto malicioso que el atacante escribe para intentar el ataque. |
+| API | La puerta por donde otras aplicaciones se comunican con el sistema. |
+| Inyección a ciegas | Un ataque en el que el atacante no ve los datos, pero los deduce haciendo muchas preguntas de sí o no y mirando cómo responde el sistema. |
+| Inyección de segunda orden | El ataque se guarda primero como un dato normal y se ejecuta después, cuando ese dato se usa en otra consulta. |
+| Sanitizar | Limpiar o rechazar los caracteres peligrosos de lo que escribe el usuario. |
+| WAF | Un filtro que se pone delante de la aplicación y bloquea peticiones con ataques conocidos. |
+| Análisis estático | Revisar el código con una herramienta automática, sin ejecutarlo, para encontrar errores de seguridad. |
+| Falso positivo | Cuando una herramienta marca como problema algo que en realidad está bien. |
+| Código 403 | La respuesta del sistema cuando bloquea una petición porque no está permitida. |
+| SLA | El compromiso de disponibilidad del servicio. 99,9 % significa que puede estar caído menos de 9 horas al año. |

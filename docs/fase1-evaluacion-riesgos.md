@@ -100,3 +100,28 @@ Lo que más afecta el **SLA** es VULN-014 (puede apagar el servidor) y VULN-012 
 **Discrepancia con el feature:**
 
 El feature espera 1 crítica, 2 altas, 2 medias y 1 baja, pero esta evaluación da 5 críticas, 8 altas, 2 medias y ninguna baja. Los datos y la prueba no coinciden; lo dejo como hallazgo en lugar de ajustar los datos para que la prueba pase.
+
+---
+
+## Glosario
+
+| Término | Qué significa |
+|---|---|
+| Vulnerabilidad | Una debilidad del sistema que alguien podría aprovechar para hacer daño. |
+| Riesgo | Qué tan probable es que una vulnerabilidad se aproveche y qué tan grave sería si pasa. |
+| Riesgo residual | El riesgo que queda después de aplicar una medida. Casi nunca llega a cero. |
+| CVSS | Una escala de 0 a 10 que mide qué tan grave es una vulnerabilidad desde lo técnico. |
+| CVE | El código único con el que se identifica una vulnerabilidad conocida públicamente. |
+| SLA | El compromiso de disponibilidad del servicio. 99,9 % significa que puede estar caído menos de 9 horas al año. |
+| Inyección SQL | Escribir comandos de base de datos en un campo del formulario para sacar o borrar información. |
+| PreparedStatement | Una forma de hacer consultas en Java que separa el dato del usuario de la orden, para que no se pueda inyectar nada. |
+| CSRF | Un ataque en el que otra página hace que tu navegador envíe una orden al banco sin que te des cuenta. |
+| XSS | Un ataque que mete código malicioso en una página para, por ejemplo, robar la sesión del usuario. |
+| JWT | Un "pase" digital que el sistema entrega al iniciar sesión. Dice quién eres y va firmado para que nadie lo altere. |
+| Deserialización | Convertir datos recibidos en objetos del programa. Si no se controla, un atacante puede enviar uno preparado para ejecutar código. |
+| SSRF | Engañar al servidor para que visite direcciones internas que no deberían verse desde afuera. |
+| XXE | Un ataque con archivos XML preparados para leer archivos del servidor o llenar su memoria. |
+| LDAP | El directorio donde se guardan los usuarios y sus permisos. |
+| Path Traversal | Usar cosas como `../` en el nombre de un archivo para salir de la carpeta permitida. |
+| Debug | Un modo de diagnóstico para desarrolladores que muestra información interna del sistema. |
+| Gestor de secretos | Un sistema especial para guardar contraseñas y claves de forma segura, fuera del código. |
